@@ -29,5 +29,7 @@ public class Notificacion {
     @Column(nullable = false)
     private LocalDate fecha_envio;
 
-
+    @ManyToOne
+    @JoinColumn(name = "id_estado", nullable = false)
+    private Estado estado;
 }
