@@ -1,25 +1,43 @@
 package com.notificaciones.microservicio_notificaciones.service;
 
+import com.notificaciones.microservicio_notificaciones.dto.NotificacionResponseDTO;
 import com.notificaciones.microservicio_notificaciones.model.Notificacion;
 import com.notificaciones.microservicio_notificaciones.repository.NotificacionRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class NotificacionService {
 
-    @Autowired
-    private NotificacionRepository notificacionRepository;
+    private final NotificacionRepository notificacionRepository;
 
-    public List<Notificacion> listarNotificaciones(){
-        return notificacionRepository.listarNotificaciones();
+    private NotificacionResponseDTO mapToDTO(Notificacion noti){
+        return new NotificacionResponseDTO(
+                noti.getIdNotificacion(),
+                noti.getTipo(),
+                noti.getMensaje(),
+                noti.getFecha_envio(),
+                noti.getEstado().getEstado()
+        );
     }
 
-    public Notificacion generarNotificacion(Notificacion noti){
-        return notificacionRepository.generarNotificacion(noti);
+    public List<NotificacionResponseDTO> obtenerNotificaciones(){
+        return notificacionRepository.findAll()
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
     }
+
+    public Optional<NotificacionResponseDTO> buscarPorId(Long id){
+        return notificacionRepository.findById(id).map(this::mapToDTO);
+    }
+
 
 
 
