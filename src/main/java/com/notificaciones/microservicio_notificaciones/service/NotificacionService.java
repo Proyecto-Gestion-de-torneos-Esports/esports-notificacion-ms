@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,11 +43,13 @@ public class NotificacionService {
 
     public void generarNotificacion(){
         Notificacion noti = new Notificacion();
-
+        LocalDate fecha = LocalDate.now();
+        DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String fechaFormateada = fecha.format(formatoFecha);
         noti.setIdNotificacion(null);
         noti.setTipo("Aviso de partida");
         noti.setMensaje("La partida va a comenzar en 5 minutos");
-        noti.setFecha_envio(LocalDate.now());
+        noti.setFecha_envio(fechaFormateada);
         noti.setEstado(new Estado(1L, "Pendiente"));
 
         notificacionRepository.save(noti);

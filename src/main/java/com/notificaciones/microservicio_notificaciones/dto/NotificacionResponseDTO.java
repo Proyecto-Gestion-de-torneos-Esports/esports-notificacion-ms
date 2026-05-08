@@ -14,7 +14,7 @@ public class NotificacionResponseDTO {
     private Long idNotificacion;
     private String tipo;
     private String mensaje;
-    private LocalDate fechaEnvio;
+    private String fechaEnvio;
     private String estado;
 
 

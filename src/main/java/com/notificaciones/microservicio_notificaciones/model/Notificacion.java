@@ -27,7 +27,7 @@ public class Notificacion {
     private String mensaje;
 
     @Column(nullable = false)
-    private LocalDate fecha_envio;
+    private String fecha_envio;
 
     @ManyToOne
     @JoinColumn(name = "id_estado", nullable = false)
