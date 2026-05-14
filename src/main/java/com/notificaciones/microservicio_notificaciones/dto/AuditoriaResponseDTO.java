@@ -14,6 +14,4 @@ public class AuditoriaResponseDTO {
     private String detalle;
     private LocalDate fecha;
 
-
-
 }

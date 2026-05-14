@@ -27,9 +27,4 @@ public class NotificacionController {
         return notificacionService.buscarPorId(id);
     }
 
-    @PostMapping
-    public void generarNotificacion(){
-        notificacionService.generarNotificacion();
-    }
-
 }
