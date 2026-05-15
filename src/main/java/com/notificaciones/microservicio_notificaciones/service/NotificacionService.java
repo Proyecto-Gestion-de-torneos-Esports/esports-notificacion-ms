@@ -2,7 +2,6 @@ package com.notificaciones.microservicio_notificaciones.service;
 
 import com.notificaciones.microservicio_notificaciones.client.AuditoriaClient;
 import com.notificaciones.microservicio_notificaciones.dto.AuditoriaRequestDTO;
-import com.notificaciones.microservicio_notificaciones.dto.AuditoriaResponseDTO;
 import com.notificaciones.microservicio_notificaciones.dto.NotificacionResponseDTO;
 import com.notificaciones.microservicio_notificaciones.exception.NotificacionNotFoundException;
 import com.notificaciones.microservicio_notificaciones.model.Estado;
@@ -49,11 +48,11 @@ public class NotificacionService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<NotificacionResponseDTO> buscarPorId(Long id){
+    public NotificacionResponseDTO buscarPorId(Long id){
         Optional<Notificacion> notificacion = notificacionRepository.findById(id);
 
         if(notificacion.isPresent()){
-            return notificacion.map(this::mapToDTO);
+            return notificacion.map(this::mapToDTO).orElseThrow();
         }else{
             throw new NotificacionNotFoundException("Notificación no encontrada con id: "+id);
         }
@@ -81,7 +80,7 @@ public class NotificacionService {
         return noti;
     }
 
-    public void enviarEmail(String correo){
+    public void generarEmail(String correo){
         Notificacion noti = generarNotificacion();
         SimpleMailMessage mensaje =new SimpleMailMessage();
 
@@ -90,7 +89,7 @@ public class NotificacionService {
         mensaje.setText(noti.getMensaje()+ "\nNotificación generada automaticamente");
 
         mailSender.send(mensaje);
-        log.info("Email enviado");
+        log.info("Email enviado con exito!");
 
         Estado estadoEnviado = estadoRepository.findById(2L).orElseThrow();
         noti.setEstado(estadoEnviado);
@@ -99,10 +98,10 @@ public class NotificacionService {
     }
 
     @Scheduled(fixedRate = 60000)
-    public void revisarHora(String correo, LocalDateTime hora){
+    public void enviarEmail(String correo, LocalDateTime hora){
         LocalDateTime ahora =LocalDateTime.now().withSecond(0).withNano(0);
         if(ahora.equals(hora.minusMinutes(5))){
-            enviarEmail(correo);
+            generarEmail(correo);
         }
     }
 
