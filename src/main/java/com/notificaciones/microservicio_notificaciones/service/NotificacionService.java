@@ -64,7 +64,7 @@ public class NotificacionService {
         return fecha.format(formatoFecha);
     }
 
-    public Notificacion generarNotificacion(){
+    public NotificacionResponseDTO generarNotificacion(){
         Notificacion noti = new Notificacion();
 
         noti.setTipo("Aviso de partida");
@@ -77,11 +77,11 @@ public class NotificacionService {
         notificacionRepository.save(noti);
         log.info("Notificación generada con exito");
         registrarAuditoria("Notificación generada");
-        return noti;
+        return mapToDTO(noti);
     }
 
-    public void generarEmail(String correo){
-        Notificacion noti = generarNotificacion();
+    public void generarEmail(Long id, String correo){
+        Notificacion noti = notificacionRepository.findById(id).orElseThrow();
         SimpleMailMessage mensaje =new SimpleMailMessage();
 
         mensaje.setTo(correo);
@@ -93,17 +93,10 @@ public class NotificacionService {
 
         Estado estadoEnviado = estadoRepository.findById(2L).orElseThrow();
         noti.setEstado(estadoEnviado);
-        registrarAuditoria("Email de notificación enviado");
+        registrarAuditoria("Email de notificación enviado a correo: "+correo);
         notificacionRepository.save(noti);
     }
 
-    @Scheduled(fixedRate = 60000)
-    public void enviarEmail(String correo, LocalDateTime hora){
-        LocalDateTime ahora =LocalDateTime.now().withSecond(0).withNano(0);
-        if(ahora.equals(hora.minusMinutes(5))){
-            generarEmail(correo);
-        }
-    }
 
     public void registrarAuditoria(String detalle){
         AuditoriaRequestDTO auditoria = new AuditoriaRequestDTO();

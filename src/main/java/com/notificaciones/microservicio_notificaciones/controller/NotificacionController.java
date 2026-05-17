@@ -27,8 +27,14 @@ public class NotificacionController {
         return ResponseEntity.status(HttpStatus.OK).body(notificacionService.buscarPorId(id));
     }
 
-    @PostMapping ResponseEntity<NotificacionResponseDTO> generarNotificacion(String correo, LocalDateTime fecha){
-        notificacionService.enviarEmail(correo, fecha);
+    @PostMapping
+    public ResponseEntity<NotificacionResponseDTO> generarNotificacion(){
+        return ResponseEntity.status(HttpStatus.CREATED).body(notificacionService.generarNotificacion());
+    }
+
+    @PostMapping("/generarCorreo")
+    public ResponseEntity<?> generarCorreo(@RequestParam Long id, @RequestParam String correo){
+        notificacionService.generarEmail(id, correo);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
