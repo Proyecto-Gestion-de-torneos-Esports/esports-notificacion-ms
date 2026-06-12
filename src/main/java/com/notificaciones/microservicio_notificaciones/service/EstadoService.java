@@ -34,6 +34,7 @@ public class EstadoService {
         if(estado.isPresent()){
             log.info("Estado con id {} encontrado y eliminado con exito",id);
             estadoRepository.deleteById(id);
+            return;
         }
         log.warn("Error al eliminar, estado con id {} no encontrado",id);
         throw new EstadoNotFoundException("Estado con id "+id+" no encontrado");
