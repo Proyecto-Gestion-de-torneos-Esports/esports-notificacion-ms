@@ -2,15 +2,14 @@ package com.notificaciones.microservicio_notificaciones.controller;
 
 import com.notificaciones.microservicio_notificaciones.dto.NotificacionResponseDTO;
 import com.notificaciones.microservicio_notificaciones.model.Estado;
-import com.notificaciones.microservicio_notificaciones.model.Notificacion;
 import com.notificaciones.microservicio_notificaciones.service.EstadoService;
 import com.notificaciones.microservicio_notificaciones.service.NotificacionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -29,13 +28,13 @@ public class NotificacionControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockitoBean
+    @Mock
     private NotificacionService notificacionService;
 
-    @MockitoBean
+    @Mock
     private EstadoService estadoService;
 
-    @MockitoBean
+    @Mock
     private JavaMailSender mailSender;
 
     private NotificacionResponseDTO notificacion;

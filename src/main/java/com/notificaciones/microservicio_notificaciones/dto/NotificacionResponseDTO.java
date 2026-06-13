@@ -3,12 +3,13 @@ package com.notificaciones.microservicio_notificaciones.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class NotificacionResponseDTO {
+public class NotificacionResponseDTO extends RepresentationModel<NotificacionResponseDTO> {
 
     private Long idNotificacion;
     private String tipo;
