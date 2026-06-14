@@ -10,6 +10,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class EstadoController {
     private final EstadoService estadoService;
     private final EstadoModelAssembler estadoAssembler;
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('ARBITRO') or hasRole('COACH') or hasRole('JUGADOR')")
     @GetMapping
     @Operation(summary = "Obtener estados", description = "Consulta de estados")
     public ResponseEntity<?> obtenerEstados(){
@@ -38,6 +40,7 @@ public class EstadoController {
         return ResponseEntity.status(HttpStatus.OK).body(collectionModel);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @Operation(summary = "Crear estado", description = "Creación de estado")
     public ResponseEntity<?> crearEstado(@RequestBody Estado estado){
@@ -45,6 +48,7 @@ public class EstadoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(estadoAssembler.toModel(estado1));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar estado", description = "Eliminacion de estados")
     public ResponseEntity<?> eliminarEstado(@PathVariable Long id){
